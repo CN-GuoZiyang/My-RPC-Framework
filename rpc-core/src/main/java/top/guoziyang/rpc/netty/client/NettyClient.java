@@ -14,6 +14,7 @@ import top.guoziyang.rpc.codec.CommonEncoder;
 import top.guoziyang.rpc.entity.RpcRequest;
 import top.guoziyang.rpc.entity.RpcResponse;
 import top.guoziyang.rpc.serializer.JsonSerializer;
+import top.guoziyang.rpc.serializer.KryoSerializer;
 
 /**
  * NIO方式消费侧客户端类
@@ -43,7 +44,7 @@ public class NettyClient implements RpcClient {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new JsonSerializer()))
+                                .addLast(new CommonEncoder(new KryoSerializer()))
                                 .addLast(new NettyClientHandler());
                     }
                 });
