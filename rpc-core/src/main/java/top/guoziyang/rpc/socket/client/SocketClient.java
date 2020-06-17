@@ -1,7 +1,8 @@
-package top.guoziyang.rpc.client;
+package top.guoziyang.rpc.socket.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.guoziyang.rpc.RpcClient;
 import top.guoziyang.rpc.entity.RpcRequest;
 import top.guoziyang.rpc.entity.RpcResponse;
 import top.guoziyang.rpc.enumeration.ResponseCode;
@@ -14,14 +15,23 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * 远程方法调用的消费者（客户端）
+ * Socket方式远程方法调用的消费者（客户端）
  * @author ziyang
  */
-public class RpcClient {
+public class SocketClient implements RpcClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(RpcClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(SocketClient.class);
 
-    public Object sendRequest(RpcRequest rpcRequest, String host, int port) {
+    private final String host;
+    private final int port;
+
+    public SocketClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
+    @Override
+    public Object sendRequest(RpcRequest rpcRequest) {
         try (Socket socket = new Socket(host, port)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
