@@ -31,8 +31,8 @@ public class RpcServer {
             logger.info("服务器正在启动...");
             Socket socket;
             while((socket = serverSocket.accept()) != null) {
-                logger.info("客户端连接！Ip为：" + socket.getInetAddress());
-                threadPool.execute(new WorkerThread(socket, service));
+                logger.info("客户端连接！Ip为：" + socket.getInetAddress() + ":" + socket.getPort());
+                threadPool.execute(new RequestHandler(socket, service));
             }
         } catch (IOException e) {
             logger.error("连接时有错误发生：", e);
