@@ -12,6 +12,7 @@ import java.io.IOException;
 
 /**
  * 使用JSON格式的序列化器
+ *
  * @author ziyang
  */
 public class JsonSerializer implements CommonSerializer {
@@ -34,7 +35,7 @@ public class JsonSerializer implements CommonSerializer {
     public Object deserialize(byte[] bytes, Class<?> clazz) {
         try {
             Object obj = objectMapper.readValue(bytes, clazz);
-            if(obj instanceof RpcRequest) {
+            if (obj instanceof RpcRequest) {
                 obj = handleRequest(obj);
             }
             return obj;
@@ -50,9 +51,9 @@ public class JsonSerializer implements CommonSerializer {
      */
     private Object handleRequest(Object obj) throws IOException {
         RpcRequest rpcRequest = (RpcRequest) obj;
-        for(int i = 0; i < rpcRequest.getParamTypes().length; i ++) {
+        for (int i = 0; i < rpcRequest.getParamTypes().length; i++) {
             Class<?> clazz = rpcRequest.getParamTypes()[i];
-            if(!clazz.isAssignableFrom(rpcRequest.getParameters()[i].getClass())) {
+            if (!clazz.isAssignableFrom(rpcRequest.getParameters()[i].getClass())) {
                 byte[] bytes = objectMapper.writeValueAsBytes(rpcRequest.getParameters()[i]);
                 rpcRequest.getParameters()[i] = objectMapper.readValue(bytes, clazz);
             }

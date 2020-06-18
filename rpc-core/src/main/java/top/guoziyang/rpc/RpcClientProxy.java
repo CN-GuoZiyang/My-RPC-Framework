@@ -10,6 +10,7 @@ import java.lang.reflect.Proxy;
 
 /**
  * RPC客户端动态代理
+ *
  * @author ziyang
  */
 public class RpcClientProxy implements InvocationHandler {

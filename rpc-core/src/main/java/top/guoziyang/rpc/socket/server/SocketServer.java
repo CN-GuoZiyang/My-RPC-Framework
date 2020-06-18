@@ -13,6 +13,7 @@ import java.util.concurrent.*;
 
 /**
  * Socket方式远程方法调用的提供者（服务端）
+ *
  * @author ziyang
  */
 public class SocketServer implements RpcServer {
@@ -24,8 +25,8 @@ public class SocketServer implements RpcServer {
     private static final int KEEP_ALIVE_TIME = 60;
     private static final int BLOCKING_QUEUE_CAPACITY = 100;
     private final ExecutorService threadPool;
-    private RequestHandler requestHandler = new RequestHandler();
     private final ServiceRegistry serviceRegistry;
+    private RequestHandler requestHandler = new RequestHandler();
 
     public SocketServer(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
@@ -39,7 +40,7 @@ public class SocketServer implements RpcServer {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             logger.info("服务器启动……");
             Socket socket;
-            while((socket = serverSocket.accept()) != null) {
+            while ((socket = serverSocket.accept()) != null) {
                 logger.info("消费者连接: {}:{}", socket.getInetAddress(), socket.getPort());
                 threadPool.execute(new RequestHandlerThread(socket, requestHandler, serviceRegistry));
             }

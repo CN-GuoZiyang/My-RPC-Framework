@@ -1,12 +1,13 @@
 package top.guoziyang.test;
 
+import top.guoziyang.rpc.RpcClientProxy;
 import top.guoziyang.rpc.api.HelloObject;
 import top.guoziyang.rpc.api.HelloService;
-import top.guoziyang.rpc.RpcClientProxy;
 import top.guoziyang.rpc.socket.client.SocketClient;
 
 /**
  * 测试用消费者（客户端）
+ *
  * @author ziyang
  */
 public class SocketTestClient {

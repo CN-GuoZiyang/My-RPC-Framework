@@ -13,25 +13,17 @@ import top.guoziyang.rpc.codec.CommonDecoder;
 import top.guoziyang.rpc.codec.CommonEncoder;
 import top.guoziyang.rpc.entity.RpcRequest;
 import top.guoziyang.rpc.entity.RpcResponse;
-import top.guoziyang.rpc.serializer.JsonSerializer;
 import top.guoziyang.rpc.serializer.KryoSerializer;
 
 /**
  * NIO方式消费侧客户端类
+ *
  * @author ziyang
  */
 public class NettyClient implements RpcClient {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
-
-    private String host;
-    private int port;
     private static final Bootstrap bootstrap;
-
-    public NettyClient(String host, int port) {
-        this.host = host;
-        this.port = port;
-    }
 
     static {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -50,6 +42,14 @@ public class NettyClient implements RpcClient {
                 });
     }
 
+    private String host;
+    private int port;
+
+    public NettyClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
     @Override
     public Object sendRequest(RpcRequest rpcRequest) {
         try {
@@ -57,9 +57,9 @@ public class NettyClient implements RpcClient {
             ChannelFuture future = bootstrap.connect(host, port).sync();
             logger.info("客户端连接到服务器 {}:{}", host, port);
             Channel channel = future.channel();
-            if(channel != null) {
+            if (channel != null) {
                 channel.writeAndFlush(rpcRequest).addListener(future1 -> {
-                    if(future1.isSuccess()) {
+                    if (future1.isSuccess()) {
                         logger.info(String.format("客户端发送消息: %s", rpcRequest.toString()));
                     } else {
                         logger.error("发送消息时有错误发生: ", future1.cause());

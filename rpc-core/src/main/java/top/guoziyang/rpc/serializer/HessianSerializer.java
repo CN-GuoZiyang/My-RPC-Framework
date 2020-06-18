@@ -13,9 +13,10 @@ import java.io.IOException;
 
 /**
  * 基于Hessian协议的序列化器
+ *
  * @author ziyang
  */
-public class HessianSerializer implements CommonSerializer{
+public class HessianSerializer implements CommonSerializer {
 
     private static final Logger logger = LoggerFactory.getLogger(HessianSerializer.class);
 
@@ -30,7 +31,7 @@ public class HessianSerializer implements CommonSerializer{
             logger.error("序列化时有错误发生:", e);
             throw new SerializeException("序列化时有错误发生");
         } finally {
-            if(hessianOutput != null) {
+            if (hessianOutput != null) {
                 try {
                     hessianOutput.close();
                 } catch (IOException e) {
@@ -50,7 +51,7 @@ public class HessianSerializer implements CommonSerializer{
             logger.error("序列化时有错误发生:", e);
             throw new SerializeException("序列化时有错误发生");
         } finally {
-            if(hessianInput != null) hessianInput.close();
+            if (hessianInput != null) hessianInput.close();
         }
     }
 

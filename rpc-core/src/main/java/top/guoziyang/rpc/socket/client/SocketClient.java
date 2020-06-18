@@ -16,6 +16,7 @@ import java.net.Socket;
 
 /**
  * Socket方式远程方法调用的消费者（客户端）
+ *
  * @author ziyang
  */
 public class SocketClient implements RpcClient {
@@ -38,11 +39,11 @@ public class SocketClient implements RpcClient {
             objectOutputStream.writeObject(rpcRequest);
             objectOutputStream.flush();
             RpcResponse rpcResponse = (RpcResponse) objectInputStream.readObject();
-            if(rpcResponse == null) {
+            if (rpcResponse == null) {
                 logger.error("服务调用失败，service：{}", rpcRequest.getInterfaceName());
                 throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, " service:" + rpcRequest.getInterfaceName());
             }
-            if(rpcResponse.getStatusCode() == null || rpcResponse.getStatusCode() != ResponseCode.SUCCESS.getCode()) {
+            if (rpcResponse.getStatusCode() == null || rpcResponse.getStatusCode() != ResponseCode.SUCCESS.getCode()) {
                 logger.error("调用服务失败, service: {}, response:{}", rpcRequest.getInterfaceName(), rpcResponse);
                 throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, " service:" + rpcRequest.getInterfaceName());
             }

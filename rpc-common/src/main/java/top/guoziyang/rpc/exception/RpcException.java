@@ -4,6 +4,7 @@ import top.guoziyang.rpc.enumeration.RpcError;
 
 /**
  * RPC调用异常
+ *
  * @author ziyang
  */
 public class RpcException extends RuntimeException {

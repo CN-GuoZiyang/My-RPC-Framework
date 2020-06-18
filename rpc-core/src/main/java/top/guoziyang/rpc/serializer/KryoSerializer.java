@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * Kryo序列化器
+ *
  * @author ziyang
  */
 public class KryoSerializer implements CommonSerializer {
@@ -33,7 +34,7 @@ public class KryoSerializer implements CommonSerializer {
     @Override
     public byte[] serialize(Object obj) {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-             Output output = new Output(byteArrayOutputStream)){
+             Output output = new Output(byteArrayOutputStream)) {
             Kryo kryo = kryoThreadLocal.get();
             kryo.writeObject(output, obj);
             kryoThreadLocal.remove();
@@ -47,7 +48,7 @@ public class KryoSerializer implements CommonSerializer {
     @Override
     public Object deserialize(byte[] bytes, Class<?> clazz) {
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-            Input input = new Input(byteArrayInputStream)) {
+             Input input = new Input(byteArrayInputStream)) {
             Kryo kryo = kryoThreadLocal.get();
             Object o = kryo.readObject(input, clazz);
             kryoThreadLocal.remove();
