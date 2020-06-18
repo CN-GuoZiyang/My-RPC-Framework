@@ -1,6 +1,7 @@
 package top.guoziyang.rpc.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import top.guoziyang.rpc.enumeration.ResponseCode;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @author ziyang
  */
 @Data
+@NoArgsConstructor
 public class RpcResponse<T> implements Serializable {
 
     /**
@@ -29,9 +31,6 @@ public class RpcResponse<T> implements Serializable {
      * 响应数据
      */
     private T data;
-
-    public RpcResponse() {
-    }
 
     public static <T> RpcResponse<T> success(T data, String requestId) {
         RpcResponse<T> response = new RpcResponse<>();
