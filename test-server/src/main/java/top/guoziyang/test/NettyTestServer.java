@@ -5,6 +5,7 @@ import top.guoziyang.rpc.netty.server.NettyServer;
 import top.guoziyang.rpc.registry.DefaultServiceRegistry;
 import top.guoziyang.rpc.registry.ServiceRegistry;
 import top.guoziyang.rpc.serializer.KryoSerializer;
+import top.guoziyang.rpc.serializer.ProtobufSerializer;
 
 /**
  * 测试用Netty服务提供者（服务端）
@@ -18,7 +19,7 @@ public class NettyTestServer {
         ServiceRegistry registry = new DefaultServiceRegistry();
         registry.register(helloService);
         NettyServer server = new NettyServer();
-        server.setSerializer(new KryoSerializer());
+        server.setSerializer(new ProtobufSerializer());
         server.start(9999);
     }
 
