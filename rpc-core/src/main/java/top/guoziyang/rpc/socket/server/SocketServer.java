@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.guoziyang.rpc.RequestHandler;
 import top.guoziyang.rpc.RpcServer;
+import top.guoziyang.rpc.enumeration.RpcError;
+import top.guoziyang.rpc.exception.RpcException;
 import top.guoziyang.rpc.registry.ServiceRegistry;
+import top.guoziyang.rpc.serializer.CommonSerializer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -26,6 +29,7 @@ public class SocketServer implements RpcServer {
     private static final int BLOCKING_QUEUE_CAPACITY = 100;
     private final ExecutorService threadPool;
     private final ServiceRegistry serviceRegistry;
+    private CommonSerializer serializer;
     private RequestHandler requestHandler = new RequestHandler();
 
     public SocketServer(ServiceRegistry serviceRegistry) {
@@ -37,17 +41,26 @@ public class SocketServer implements RpcServer {
 
     @Override
     public void start(int port) {
+        if(serializer == null) {
+            logger.error("未设置序列化器");
+            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
+        }
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             logger.info("服务器启动……");
             Socket socket;
             while ((socket = serverSocket.accept()) != null) {
                 logger.info("消费者连接: {}:{}", socket.getInetAddress(), socket.getPort());
-                threadPool.execute(new RequestHandlerThread(socket, requestHandler, serviceRegistry));
+                threadPool.execute(new RequestHandlerThread(socket, requestHandler, serviceRegistry, serializer));
             }
             threadPool.shutdown();
         } catch (IOException e) {
             logger.error("服务器启动时有错误发生:", e);
         }
+    }
+
+    @Override
+    public void setSerializer(CommonSerializer serializer) {
+        this.serializer = serializer;
     }
 
 }

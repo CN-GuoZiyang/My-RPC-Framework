@@ -3,6 +3,7 @@ package top.guoziyang.test;
 import top.guoziyang.rpc.api.HelloService;
 import top.guoziyang.rpc.registry.DefaultServiceRegistry;
 import top.guoziyang.rpc.registry.ServiceRegistry;
+import top.guoziyang.rpc.serializer.HessianSerializer;
 import top.guoziyang.rpc.socket.server.SocketServer;
 
 /**
@@ -17,6 +18,7 @@ public class SocketTestServer {
         ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
         serviceRegistry.register(helloService);
         SocketServer socketServer = new SocketServer(serviceRegistry);
+        socketServer.setSerializer(new HessianSerializer());
         socketServer.start(9000);
     }
 

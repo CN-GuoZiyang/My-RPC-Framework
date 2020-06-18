@@ -13,7 +13,7 @@ import top.guoziyang.rpc.serializer.CommonSerializer;
  * @author ziyang
  */
 public class CommonEncoder extends MessageToByteEncoder {
-
+    // messageToByte 是编码, 这是服务器out的时候需要的
     private static final int MAGIC_NUMBER = 0xCAFEBABE;
 
     private final CommonSerializer serializer;
