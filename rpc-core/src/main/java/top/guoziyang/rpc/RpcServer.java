@@ -1,5 +1,7 @@
 package top.guoziyang.rpc;
 
+import top.guoziyang.rpc.serializer.CommonSerializer;
+
 /**
  * 服务器类通用接口
  *
@@ -8,5 +10,7 @@ package top.guoziyang.rpc;
 public interface RpcServer {
 
     void start(int port);
+
+    void setSerializer(CommonSerializer serializer);
 
 }
