@@ -53,6 +53,7 @@ public class NettyClient implements RpcClient {
             logger.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
+        // 这里是同步设置结果的
         AtomicReference<Object> result = new AtomicReference<>(null);
         try {
             InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
@@ -66,6 +67,7 @@ public class NettyClient implements RpcClient {
                     }
                 });
                 channel.closeFuture().sync();
+                // attributekey是channel隔离的,保证获取到的是当前channel发起的请求结果
                 AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse" + rpcRequest.getRequestId());
                 RpcResponse rpcResponse = channel.attr(key).get();
                 RpcMessageChecker.check(rpcRequest, rpcResponse);

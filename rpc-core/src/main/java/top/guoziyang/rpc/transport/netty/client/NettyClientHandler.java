@@ -21,6 +21,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<RpcResponse>
     protected void channelRead0(ChannelHandlerContext ctx, RpcResponse msg) throws Exception {
         try {
             logger.info(String.format("客户端接收到消息: %s", msg));
+            // 绑定相应数据到attributekey上后就关闭,这里如果需要长链接如何处理? 有待改进
             AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse" + msg.getRequestId());
             ctx.channel().attr(key).set(msg);
             ctx.channel().close();

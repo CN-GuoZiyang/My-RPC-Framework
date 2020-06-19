@@ -33,6 +33,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest msg) throws Exception {
+        // 引入线程池来处理业务,防止netty的worker线程长时间阻塞,导致不能处理read事件
         threadPool.execute(() -> {
             try {
                 logger.info("服务器接收到请求: {}", msg);
