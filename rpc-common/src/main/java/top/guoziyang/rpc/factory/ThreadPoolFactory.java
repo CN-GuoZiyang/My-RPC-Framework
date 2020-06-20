@@ -1,4 +1,4 @@
-package top.guoziyang.rpc.util;
+package top.guoziyang.rpc.factory;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
