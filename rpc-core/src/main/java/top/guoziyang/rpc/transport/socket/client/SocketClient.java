@@ -2,7 +2,9 @@ package top.guoziyang.rpc.transport.socket.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.guoziyang.rpc.registry.NacosServiceDiscovery;
 import top.guoziyang.rpc.registry.NacosServiceRegistry;
+import top.guoziyang.rpc.registry.ServiceDiscovery;
 import top.guoziyang.rpc.registry.ServiceRegistry;
 import top.guoziyang.rpc.transport.RpcClient;
 import top.guoziyang.rpc.entity.RpcRequest;
@@ -28,12 +30,12 @@ public class SocketClient implements RpcClient {
 
     private static final Logger logger = LoggerFactory.getLogger(SocketClient.class);
 
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceDiscovery serviceDiscovery;
 
     private CommonSerializer serializer;
 
     public SocketClient() {
-        this.serviceRegistry = new NacosServiceRegistry();
+        this.serviceDiscovery = new NacosServiceDiscovery();
     }
 
     @Override
@@ -42,7 +44,7 @@ public class SocketClient implements RpcClient {
             logger.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
+        InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest.getInterfaceName());
         try (Socket socket = new Socket()) {
             socket.connect(inetSocketAddress);
             OutputStream outputStream = socket.getOutputStream();
