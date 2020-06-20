@@ -18,18 +18,10 @@ public class NacosServiceRegistry implements ServiceRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger(NacosServiceRegistry.class);
 
-    public final NamingService namingService;
-
-    public NacosServiceRegistry() {
-        this.namingService = NacosUtil.getNacosNamingService();
-    }
-
     @Override
     public void register(String serviceName, InetSocketAddress inetSocketAddress) {
         try {
-            // namcespace->service_name(groupname+serviceName)->groupName->clusterName->instance
-            // 确认一个instance位置的过程,gourpName+clusterName都有默认值
-            NacosUtil.registerService(namingService, serviceName, inetSocketAddress);
+            NacosUtil.registerService(serviceName, inetSocketAddress);
         } catch (NacosException e) {
             logger.error("注册服务时有错误发生:", e);
             throw new RpcException(RpcError.REGISTER_SERVICE_FAILED);

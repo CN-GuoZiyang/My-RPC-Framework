@@ -9,6 +9,8 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.guoziyang.rpc.hook.ShutdownHook;
+import top.guoziyang.rpc.transport.RpcServer;
 import top.guoziyang.rpc.codec.CommonDecoder;
 import top.guoziyang.rpc.codec.CommonEncoder;
 import top.guoziyang.rpc.enumeration.RpcError;
@@ -86,6 +88,7 @@ public class NettyServer implements RpcServer {
                         }
                     });
             ChannelFuture future = serverBootstrap.bind(host, port).sync();
+            ShutdownHook.getShutdownHook().addClearAllHook();
             future.channel().closeFuture().sync();
 
         } catch (InterruptedException e) {

@@ -17,17 +17,10 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
 
     private static final Logger logger = LoggerFactory.getLogger(NacosServiceDiscovery.class);
 
-    private final NamingService namingService;
-
-    public NacosServiceDiscovery() {
-        namingService = NacosUtil.getNacosNamingService();
-    }
-
     @Override
     public InetSocketAddress lookupService(String serviceName) {
         try {
-            List<Instance> instances = NacosUtil.getAllInstance(namingService, serviceName);
-            // 获取到具体的实例,这里先暂时取第一个,后面完善负载均衡算法
+            List<Instance> instances = NacosUtil.getAllInstance(serviceName);
             Instance instance = instances.get(0);
             return new InetSocketAddress(instance.getIp(), instance.getPort());
         } catch (NacosException e) {
