@@ -2,22 +2,22 @@ package top.guoziyang.rpc.transport.socket.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.guoziyang.rpc.handler.RequestHandler;
-import top.guoziyang.rpc.transport.RpcServer;
 import top.guoziyang.rpc.enumeration.RpcError;
 import top.guoziyang.rpc.exception.RpcException;
+import top.guoziyang.rpc.handler.RequestHandler;
 import top.guoziyang.rpc.provider.ServiceProvider;
 import top.guoziyang.rpc.provider.ServiceProviderImpl;
 import top.guoziyang.rpc.registry.NacosServiceRegistry;
 import top.guoziyang.rpc.registry.ServiceRegistry;
 import top.guoziyang.rpc.serializer.CommonSerializer;
+import top.guoziyang.rpc.transport.RpcServer;
 import top.guoziyang.rpc.util.ThreadPoolFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Socket方式远程方法调用的提供者（服务端）
@@ -46,12 +46,12 @@ public class SocketServer implements RpcServer {
     }
 
     @Override
-    public <T> void publishService(Object service, Class<T> serviceClass) {
+    public <T> void publishService(T service, Class<T> serviceClass) {
         if(serializer == null) {
             logger.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        serviceProvider.addServiceProvider(service);
+        serviceProvider.addServiceProvider(service, serviceClass);
         serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
         start();
     }

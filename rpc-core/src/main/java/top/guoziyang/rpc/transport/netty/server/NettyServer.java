@@ -9,7 +9,6 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.guoziyang.rpc.transport.RpcServer;
 import top.guoziyang.rpc.codec.CommonDecoder;
 import top.guoziyang.rpc.codec.CommonEncoder;
 import top.guoziyang.rpc.enumeration.RpcError;
@@ -19,6 +18,7 @@ import top.guoziyang.rpc.provider.ServiceProviderImpl;
 import top.guoziyang.rpc.registry.NacosServiceRegistry;
 import top.guoziyang.rpc.registry.ServiceRegistry;
 import top.guoziyang.rpc.serializer.CommonSerializer;
+import top.guoziyang.rpc.transport.RpcServer;
 
 import java.net.InetSocketAddress;
 
@@ -47,12 +47,12 @@ public class NettyServer implements RpcServer {
     }
 
     @Override
-    public <T> void publishService(Object service, Class<T> serviceClass) {
+    public <T> void publishService(T service, Class<T> serviceClass) {
         if(serializer == null) {
             logger.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        serviceProvider.addServiceProvider(service);
+        serviceProvider.addServiceProvider(service, serviceClass);
         serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
         // 一个服务端只能注册一个服务,这里有待改进
         start();
