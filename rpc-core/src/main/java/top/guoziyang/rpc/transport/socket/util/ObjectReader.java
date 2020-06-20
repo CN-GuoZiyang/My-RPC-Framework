@@ -1,4 +1,4 @@
-package top.guoziyang.rpc.socket.util;
+package top.guoziyang.rpc.transport.socket.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,6 @@ import top.guoziyang.rpc.serializer.CommonSerializer;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 
 /**
  * Socket方式从输入流中读取字节并反序列化

@@ -1,4 +1,4 @@
-package top.guoziyang.rpc;
+package top.guoziyang.rpc.transport;
 
 import top.guoziyang.rpc.entity.RpcRequest;
 import top.guoziyang.rpc.serializer.CommonSerializer;

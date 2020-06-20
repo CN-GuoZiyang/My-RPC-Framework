@@ -1,4 +1,4 @@
-package top.guoziyang.rpc.socket.util;
+package top.guoziyang.rpc.transport.socket.util;
 
 import top.guoziyang.rpc.entity.RpcRequest;
 import top.guoziyang.rpc.enumeration.PackageType;

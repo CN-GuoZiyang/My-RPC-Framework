@@ -1,22 +1,28 @@
-package top.guoziyang.rpc.netty.client;
+package top.guoziyang.rpc.transport.netty.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.guoziyang.rpc.RpcClient;
-import top.guoziyang.rpc.codec.CommonDecoder;
-import top.guoziyang.rpc.codec.CommonEncoder;
+import top.guoziyang.rpc.registry.NacosServiceRegistry;
+import top.guoziyang.rpc.registry.ServiceRegistry;
+import top.guoziyang.rpc.transport.RpcClient;
 import top.guoziyang.rpc.entity.RpcRequest;
 import top.guoziyang.rpc.entity.RpcResponse;
 import top.guoziyang.rpc.enumeration.RpcError;
 import top.guoziyang.rpc.exception.RpcException;
 import top.guoziyang.rpc.serializer.CommonSerializer;
+<<<<<<< HEAD:rpc-core/src/main/java/top/guoziyang/rpc/netty/client/NettyClient.java
 import top.guoziyang.rpc.serializer.KryoSerializer;
+=======
+import top.guoziyang.rpc.util.RpcMessageChecker;
+
+import java.net.InetSocketAddress;
+import java.util.concurrent.atomic.AtomicReference;
+>>>>>>> 43f15ee ([v3.0] 基于Nacos实现了服务注册与发现):rpc-core/src/main/java/top/guoziyang/rpc/transport/netty/client/NettyClient.java
 
 /**
  * NIO方式消费侧客户端类
@@ -27,6 +33,7 @@ public class NettyClient implements RpcClient {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
     private static final Bootstrap bootstrap;
+    private final ServiceRegistry serviceRegistry;
 
     private CommonSerializer serializer;
 
@@ -38,12 +45,8 @@ public class NettyClient implements RpcClient {
                 .option(ChannelOption.SO_KEEPALIVE, true);
     }
 
-    private String host;
-    private int port;
-
-    public NettyClient(String host, int port) {
-        this.host = host;
-        this.port = port;
+    public NettyClient() {
+        this.serviceRegistry = new NacosServiceRegistry();
     }
 
     @Override
@@ -62,10 +65,16 @@ public class NettyClient implements RpcClient {
             }
         });
         try {
+<<<<<<< HEAD:rpc-core/src/main/java/top/guoziyang/rpc/netty/client/NettyClient.java
             ChannelFuture future = bootstrap.connect(host, port).sync();
             logger.info("客户端连接到服务器 {}:{}", host, port);
             Channel channel = future.channel();
             if (channel != null) {
+=======
+            InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
+            Channel channel = ChannelProvider.get(inetSocketAddress, serializer);
+            if(channel.isActive()) {
+>>>>>>> 43f15ee ([v3.0] 基于Nacos实现了服务注册与发现):rpc-core/src/main/java/top/guoziyang/rpc/transport/netty/client/NettyClient.java
                 channel.writeAndFlush(rpcRequest).addListener(future1 -> {
                     if (future1.isSuccess()) {
                         logger.info(String.format("客户端发送消息: %s", rpcRequest.toString()));
