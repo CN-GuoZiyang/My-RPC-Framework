@@ -1,4 +1,4 @@
-package top.guoziyang.rpc;
+package top.guoziyang.rpc.transport;
 
 import top.guoziyang.rpc.serializer.CommonSerializer;
 
@@ -9,8 +9,10 @@ import top.guoziyang.rpc.serializer.CommonSerializer;
  */
 public interface RpcServer {
 
-    void start(int port);
+    void start();
 
     void setSerializer(CommonSerializer serializer);
+
+    <T> void publishService(Object service, Class<T> serviceClass);
 
 }

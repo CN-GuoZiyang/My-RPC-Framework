@@ -1,4 +1,4 @@
-package top.guoziyang.rpc.netty.client;
+package top.guoziyang.rpc.transport.netty.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;

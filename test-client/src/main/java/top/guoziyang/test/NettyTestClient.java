@@ -1,11 +1,10 @@
 package top.guoziyang.test;
 
-import top.guoziyang.rpc.RpcClient;
-import top.guoziyang.rpc.RpcClientProxy;
+import top.guoziyang.rpc.transport.RpcClient;
+import top.guoziyang.rpc.transport.RpcClientProxy;
 import top.guoziyang.rpc.api.HelloObject;
 import top.guoziyang.rpc.api.HelloService;
-import top.guoziyang.rpc.netty.client.NettyClient;
-import top.guoziyang.rpc.serializer.HessianSerializer;
+import top.guoziyang.rpc.transport.netty.client.NettyClient;
 import top.guoziyang.rpc.serializer.ProtobufSerializer;
 
 /**
@@ -16,7 +15,7 @@ import top.guoziyang.rpc.serializer.ProtobufSerializer;
 public class NettyTestClient {
 
     public static void main(String[] args) {
-        RpcClient client = new NettyClient("127.0.0.1", 9999);
+        RpcClient client = new NettyClient();
         client.setSerializer(new ProtobufSerializer());
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
