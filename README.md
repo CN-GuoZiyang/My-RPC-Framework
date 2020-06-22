@@ -37,11 +37,11 @@ My-RPC-Framework 是一款基于 Nacos 实现的 RPC 框架。网络传输实现
 
 ```
 +---------------+---------------+-----------------+-------------+
-|	Magic Number	|	Package Type	|	Serializer Type	|	Data Length	|
-|	  4 bytes   	|		4 bytes   	|	    4 bytes    	|	  4 bytes 	|
+|  Magic Number |  Package Type | Serializer Type | Data Length |
+|    4 bytes    |    4 bytes    |     4 bytes     |   4 bytes   |
 +---------------+---------------+-----------------+-------------+
-|														Data Bytes													|
-|											Length: ${Data Length}										|
+|                          Data Bytes                           |
+|                   Length: ${Data Length}                      |
 +---------------------------------------------------------------+
 ```
 
