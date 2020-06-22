@@ -2,6 +2,7 @@ package top.guoziyang.test;
 
 import top.guoziyang.rpc.api.HelloObject;
 import top.guoziyang.rpc.api.HelloService;
+import top.guoziyang.rpc.loadbalancer.RoundRobinLoadBalancer;
 import top.guoziyang.rpc.serializer.CommonSerializer;
 import top.guoziyang.rpc.transport.RpcClientProxy;
 import top.guoziyang.rpc.transport.socket.client.SocketClient;
@@ -18,8 +19,10 @@ public class SocketTestClient {
         RpcClientProxy proxy = new RpcClientProxy(client);
         HelloService helloService = proxy.getProxy(HelloService.class);
         HelloObject object = new HelloObject(12, "This is a message");
-        String res = helloService.hello(object);
-        System.out.println(res);
+        for(int i = 0; i < 20; i ++) {
+            String res = helloService.hello(object);
+            System.out.println(res);
+        }
     }
 
 }

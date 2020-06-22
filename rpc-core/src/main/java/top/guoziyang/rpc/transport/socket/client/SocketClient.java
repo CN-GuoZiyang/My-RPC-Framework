@@ -7,6 +7,8 @@ import top.guoziyang.rpc.entity.RpcResponse;
 import top.guoziyang.rpc.enumeration.ResponseCode;
 import top.guoziyang.rpc.enumeration.RpcError;
 import top.guoziyang.rpc.exception.RpcException;
+import top.guoziyang.rpc.loadbalancer.LoadBalancer;
+import top.guoziyang.rpc.loadbalancer.RandomLoadBalancer;
 import top.guoziyang.rpc.registry.NacosServiceDiscovery;
 import top.guoziyang.rpc.registry.ServiceDiscovery;
 import top.guoziyang.rpc.serializer.CommonSerializer;
@@ -35,11 +37,17 @@ public class SocketClient implements RpcClient {
     private final CommonSerializer serializer;
 
     public SocketClient() {
-        this(DEFAULT_SERIALIZER);
+        this(DEFAULT_SERIALIZER, new RandomLoadBalancer());
+    }
+    public SocketClient(LoadBalancer loadBalancer) {
+        this(DEFAULT_SERIALIZER, loadBalancer);
+    }
+    public SocketClient(Integer serializer) {
+        this(serializer, new RandomLoadBalancer());
     }
 
-    public SocketClient(Integer serializer) {
-        this.serviceDiscovery = new NacosServiceDiscovery();
+    public SocketClient(Integer serializer, LoadBalancer loadBalancer) {
+        this.serviceDiscovery = new NacosServiceDiscovery(loadBalancer);
         this.serializer = CommonSerializer.getByCode(serializer);
     }
 
