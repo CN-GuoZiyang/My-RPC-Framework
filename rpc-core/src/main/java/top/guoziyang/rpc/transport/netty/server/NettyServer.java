@@ -7,6 +7,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.guoziyang.rpc.hook.ShutdownHook;
@@ -23,6 +24,7 @@ import top.guoziyang.rpc.serializer.CommonSerializer;
 import top.guoziyang.rpc.transport.RpcServer;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
 
 /**
  * NIO方式服务提供侧
@@ -82,9 +84,10 @@ public class NettyServer implements RpcServer {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             // 根据编码继承的类，在输出的时候才会编码，同理，在输入的时候只会解码
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new CommonEncoder(serializer)); //继承来自ChannelOutboundHandlerAdapter
-                            pipeline.addLast(new CommonDecoder()); //继承自 inbound
-                            pipeline.addLast(new NettyServerHandler()); //继承来自 inbound
+                            pipeline.addLast(new IdleStateHandler(30, 0, 0, TimeUnit.SECONDS))
+                                    .addLast(new CommonEncoder(serializer)) //继承来自ChannelOutboundHandlerAdapter
+                                    .addLast(new CommonDecoder()) //继承自 inbound
+                                    .addLast(new NettyServerHandler()); //继承来自 inbound
                         }
                     });
             ChannelFuture future = serverBootstrap.bind(host, port).sync();
