@@ -12,7 +12,10 @@ import org.slf4j.LoggerFactory;
 import top.guoziyang.rpc.entity.RpcRequest;
 import top.guoziyang.rpc.entity.RpcResponse;
 import top.guoziyang.rpc.factory.SingletonFactory;
+import top.guoziyang.rpc.factory.ThreadPoolFactory;
 import top.guoziyang.rpc.handler.RequestHandler;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * Netty中处理RpcRequest的Handler
@@ -22,27 +25,28 @@ import top.guoziyang.rpc.handler.RequestHandler;
 public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyServerHandler.class);
+    private static final String THREAD_NAME_PREFIX = "netty-server-handler";
+    private final ExecutorService threadPool;
     private final RequestHandler requestHandler;
 
     public NettyServerHandler() {
         this.requestHandler = SingletonFactory.getInstance(RequestHandler.class);
+        this.threadPool = ThreadPoolFactory.createDefaultThreadPool(THREAD_NAME_PREFIX);
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest msg) throws Exception {
         // 引入线程池来处理业务,防止netty的worker线程长时间阻塞,导致不能处理read事件
-        try {
-            if(msg.getHeartBeat()) {
-                logger.info("接收到客户端心跳包...");
-                return;
+        threadPool.execute(() -> {
+            try {
+                logger.info("服务器接收到请求: {}", msg);
+                Object result = requestHandler.handle(msg);
+                ChannelFuture future = ctx.writeAndFlush(RpcResponse.success(result, msg.getRequestId()));
+                future.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+            } finally {
+                ReferenceCountUtil.release(msg);
             }
-            logger.info("服务器接收到请求: {}", msg);
-            Object result = requestHandler.handle(msg);
-            ChannelFuture future = ctx.writeAndFlush(RpcResponse.success(result, msg.getRequestId()));
-            future.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
-        } finally {
-            ReferenceCountUtil.release(msg);
-        }
+        });
     }
 
     @Override
