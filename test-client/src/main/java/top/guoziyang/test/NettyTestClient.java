@@ -1,12 +1,11 @@
 package top.guoziyang.test;
 
+import top.guoziyang.rpc.api.HelloObject;
+import top.guoziyang.rpc.api.HelloService;
 import top.guoziyang.rpc.serializer.CommonSerializer;
 import top.guoziyang.rpc.transport.RpcClient;
 import top.guoziyang.rpc.transport.RpcClientProxy;
-import top.guoziyang.rpc.api.HelloObject;
-import top.guoziyang.rpc.api.HelloService;
 import top.guoziyang.rpc.transport.netty.client.NettyClient;
-import top.guoziyang.rpc.serializer.ProtobufSerializer;
 
 /**
  * 测试用Netty消费者

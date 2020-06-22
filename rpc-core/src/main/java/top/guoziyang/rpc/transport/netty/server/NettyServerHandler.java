@@ -1,7 +1,5 @@
 package top.guoziyang.rpc.transport.netty.server;
 
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
@@ -37,8 +35,11 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
             }
             logger.info("服务器接收到请求: {}", msg);
             Object result = requestHandler.handle(msg);
-            ChannelFuture future = ctx.writeAndFlush(RpcResponse.success(result, msg.getRequestId()));
-            future.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+            if (ctx.channel().isActive() && ctx.channel().isWritable()) {
+                ctx.writeAndFlush(RpcResponse.success(result, msg.getRequestId()));
+            } else {
+                logger.error("通道不可写");
+            }
         } finally {
             ReferenceCountUtil.release(msg);
         }

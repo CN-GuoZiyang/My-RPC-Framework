@@ -1,7 +1,6 @@
 package top.guoziyang.rpc.registry;
 
 import com.alibaba.nacos.api.exception.NacosException;
-import com.alibaba.nacos.api.naming.NamingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.guoziyang.rpc.enumeration.RpcError;

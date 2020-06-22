@@ -2,22 +2,22 @@ package top.guoziyang.rpc.transport.socket.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.guoziyang.rpc.registry.NacosServiceDiscovery;
-import top.guoziyang.rpc.registry.NacosServiceRegistry;
-import top.guoziyang.rpc.registry.ServiceDiscovery;
-import top.guoziyang.rpc.registry.ServiceRegistry;
-import top.guoziyang.rpc.transport.RpcClient;
 import top.guoziyang.rpc.entity.RpcRequest;
 import top.guoziyang.rpc.entity.RpcResponse;
 import top.guoziyang.rpc.enumeration.ResponseCode;
 import top.guoziyang.rpc.enumeration.RpcError;
 import top.guoziyang.rpc.exception.RpcException;
+import top.guoziyang.rpc.registry.NacosServiceDiscovery;
+import top.guoziyang.rpc.registry.ServiceDiscovery;
 import top.guoziyang.rpc.serializer.CommonSerializer;
+import top.guoziyang.rpc.transport.RpcClient;
 import top.guoziyang.rpc.transport.socket.util.ObjectReader;
 import top.guoziyang.rpc.transport.socket.util.ObjectWriter;
 import top.guoziyang.rpc.util.RpcMessageChecker;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -66,7 +66,7 @@ public class SocketClient implements RpcClient {
                 throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, " service:" + rpcRequest.getInterfaceName());
             }
             RpcMessageChecker.check(rpcRequest, rpcResponse);
-            return rpcResponse.getData();
+            return rpcResponse;
         } catch (IOException e) {
             logger.error("调用时有错误发生：", e);
             throw new RpcException("服务调用失败: ", e);
