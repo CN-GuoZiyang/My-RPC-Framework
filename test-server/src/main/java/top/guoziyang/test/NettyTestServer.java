@@ -1,7 +1,8 @@
 package top.guoziyang.test;
 
-import top.guoziyang.rpc.api.HelloService;
+import top.guoziyang.rpc.annotation.ServiceScan;
 import top.guoziyang.rpc.serializer.CommonSerializer;
+import top.guoziyang.rpc.transport.RpcServer;
 import top.guoziyang.rpc.transport.netty.server.NettyServer;
 
 /**
@@ -9,12 +10,12 @@ import top.guoziyang.rpc.transport.netty.server.NettyServer;
  *
  * @author ziyang
  */
+@ServiceScan
 public class NettyTestServer {
 
     public static void main(String[] args) {
-        HelloService helloService = new HelloServiceImpl();
-        NettyServer server = new NettyServer("127.0.0.1", 9999, CommonSerializer.PROTOBUF_SERIALIZER);
-        server.publishService(helloService, HelloService.class);
+        RpcServer server = new NettyServer("127.0.0.1", 9999, CommonSerializer.PROTOBUF_SERIALIZER);
+        server.start();
     }
 
 }
