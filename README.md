@@ -135,7 +135,6 @@ public class NettyTestClient {
 
 ## TODO
 
-- 使用接口方式自动注册服务
 - 配置文件
 
 ## LICENSE

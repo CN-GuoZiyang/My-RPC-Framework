@@ -22,6 +22,7 @@ My-RPC-Framework 是一款基于 Nacos 实现的 RPC 框架。网络传输实现
 - 如消费端和提供者都采用 Netty 方式，会采用 Netty 的心跳机制，保证连接
 - 接口抽象良好，模块耦合度低，网络传输、序列化器、负载均衡算法可配置
 - 实现自定义的通信协议
+- 服务提供侧自动注册服务
 
 ## 项目模块概览
 
@@ -72,6 +73,7 @@ package top.guoziyang.test;
 
 import top.guoziyang.rpc.api.HelloService;
 
+@Service
 public class HelloServiceImpl implements HelloService {
     @Override
     public String hello(String name) {
@@ -89,11 +91,11 @@ import top.guoziyang.rpc.api.HelloService;
 import top.guoziyang.rpc.serializer.CommonSerializer;
 import top.guoziyang.rpc.transport.netty.server.NettyServer;
 
+@ServiceScan
 public class NettyTestServer {
     public static void main(String[] args) {
-        HelloService helloService = new HelloServiceImpl();
         NettyServer server = new NettyServer("127.0.0.1", 9999, CommonSerializer.PROTOBUF_SERIALIZER);
-        server.publishService(helloService, HelloService.class);
+        server.start();
     }
 }
 ```
@@ -133,7 +135,6 @@ public class NettyTestClient {
 
 ## TODO
 
-- 使用接口方式自动注册服务
 - 配置文件
 
 ## LICENSE
