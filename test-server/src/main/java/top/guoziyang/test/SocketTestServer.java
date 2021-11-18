@@ -1,8 +1,6 @@
 package top.guoziyang.test;
 
 import top.guoziyang.rpc.api.HelloService;
-import top.guoziyang.rpc.provider.ServiceProviderImpl;
-import top.guoziyang.rpc.registry.ServiceRegistry;
 import top.guoziyang.rpc.serializer.HessianSerializer;
 import top.guoziyang.rpc.transport.socket.server.SocketServer;
 

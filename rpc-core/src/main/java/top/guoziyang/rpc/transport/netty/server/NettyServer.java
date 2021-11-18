@@ -33,7 +33,7 @@ public class NettyServer implements RpcServer {
 
     private final String host;
     private final int port;
-
+    // 本地保存服务的类是serviceProvider,serviceRegistry用来向远端nacos注册服务
     private final ServiceRegistry serviceRegistry;
     private final ServiceProvider serviceProvider;
 
@@ -54,6 +54,7 @@ public class NettyServer implements RpcServer {
         }
         serviceProvider.addServiceProvider(service);
         serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
+        // 一个服务端只能注册一个服务,这里有待改进
         start();
     }
 

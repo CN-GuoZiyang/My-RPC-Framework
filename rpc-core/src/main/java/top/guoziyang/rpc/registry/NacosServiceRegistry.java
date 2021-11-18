@@ -35,6 +35,8 @@ public class NacosServiceRegistry implements ServiceRegistry {
     @Override
     public void register(String serviceName, InetSocketAddress inetSocketAddress) {
         try {
+            // namcespace->service_name(groupname+serviceName)->groupName->clusterName->instance
+            // 确认一个instance位置的过程,gourpName+clusterName都有默认值
             namingService.registerInstance(serviceName, inetSocketAddress.getHostName(), inetSocketAddress.getPort());
         } catch (NacosException e) {
             logger.error("注册服务时有错误发生:", e);
@@ -46,6 +48,7 @@ public class NacosServiceRegistry implements ServiceRegistry {
     public InetSocketAddress lookupService(String serviceName) {
         try {
             List<Instance> instances = namingService.getAllInstances(serviceName);
+            // 获取到具体的实例,这里先暂时取第一个,后面完善负载均衡算法
             Instance instance = instances.get(0);
             return new InetSocketAddress(instance.getIp(), instance.getPort());
         } catch (NacosException e) {

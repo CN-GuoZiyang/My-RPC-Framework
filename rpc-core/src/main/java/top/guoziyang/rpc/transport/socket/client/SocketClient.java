@@ -2,25 +2,22 @@ package top.guoziyang.rpc.transport.socket.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.guoziyang.rpc.registry.NacosServiceRegistry;
-import top.guoziyang.rpc.registry.ServiceRegistry;
-import top.guoziyang.rpc.transport.RpcClient;
 import top.guoziyang.rpc.entity.RpcRequest;
 import top.guoziyang.rpc.entity.RpcResponse;
 import top.guoziyang.rpc.enumeration.ResponseCode;
 import top.guoziyang.rpc.enumeration.RpcError;
 import top.guoziyang.rpc.exception.RpcException;
+import top.guoziyang.rpc.registry.NacosServiceRegistry;
+import top.guoziyang.rpc.registry.ServiceRegistry;
 import top.guoziyang.rpc.serializer.CommonSerializer;
-<<<<<<< HEAD:rpc-core/src/main/java/top/guoziyang/rpc/socket/client/SocketClient.java
-import top.guoziyang.rpc.socket.util.ObjectReader;
-import top.guoziyang.rpc.socket.util.ObjectWriter;
-=======
+import top.guoziyang.rpc.transport.RpcClient;
 import top.guoziyang.rpc.transport.socket.util.ObjectReader;
 import top.guoziyang.rpc.transport.socket.util.ObjectWriter;
 import top.guoziyang.rpc.util.RpcMessageChecker;
->>>>>>> 43f15ee ([v3.0] 基于Nacos实现了服务注册与发现):rpc-core/src/main/java/top/guoziyang/rpc/transport/socket/client/SocketClient.java
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -63,6 +60,7 @@ public class SocketClient implements RpcClient {
                 logger.error("调用服务失败, service: {}, response:{}", rpcRequest.getInterfaceName(), rpcResponse);
                 throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, " service:" + rpcRequest.getInterfaceName());
             }
+            RpcMessageChecker.check(rpcRequest, rpcResponse);
             return rpcResponse.getData();
         } catch (IOException e) {
             logger.error("调用时有错误发生：", e);

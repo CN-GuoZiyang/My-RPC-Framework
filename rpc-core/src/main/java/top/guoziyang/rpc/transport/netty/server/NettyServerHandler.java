@@ -33,18 +33,6 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest msg) throws Exception {
-<<<<<<< HEAD:rpc-core/src/main/java/top/guoziyang/rpc/netty/server/NettyServerHandler.java
-        try {
-            logger.info("服务器接收到请求: {}", msg);
-            String interfaceName = msg.getInterfaceName();
-            Object service = serviceRegistry.getService(interfaceName);
-            Object result = requestHandler.handle(msg, service);
-            ChannelFuture future = ctx.writeAndFlush(RpcResponse.success(result));
-            future.addListener(ChannelFutureListener.CLOSE);
-        } finally {
-            ReferenceCountUtil.release(msg);
-        }
-=======
         threadPool.execute(() -> {
             try {
                 logger.info("服务器接收到请求: {}", msg);
@@ -55,7 +43,6 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
                 ReferenceCountUtil.release(msg);
             }
         });
->>>>>>> 43f15ee ([v3.0] 基于Nacos实现了服务注册与发现):rpc-core/src/main/java/top/guoziyang/rpc/transport/netty/server/NettyServerHandler.java
     }
 
     @Override
