@@ -14,8 +14,9 @@ public class SingletonFactory {
     private SingletonFactory() {}
 
     public static <T> T getInstance(Class<T> clazz) {
-        Object instance = objectMap.get(clazz);
+        Object instance;
         synchronized (clazz) {
+            instance = objectMap.get(clazz);
             if(instance == null) {
                 try {
                     instance = clazz.newInstance();
